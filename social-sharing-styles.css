@@ -1,4 +1,3 @@
-/* Responsive styles for social sharing buttons */
 .social-share-buttons {
   display: flex;
   justify-content: center;
@@ -12,13 +11,13 @@
   margin-right: 5px;
   border-radius: 4px;
   padding: 8px 12px;
-  text-decoration: none;
+  text-decoration: none !important;
   color: #fff;
-  background-color: #3b5998;
+  transition: filter 0.3s ease;
 }
 
 .social-share-button:hover {
-  filter: brightness(120%);
+  filter: brightness(110%);
 }
 
 .social-share-buttons .social-share-text {
@@ -36,4 +35,44 @@
     margin-left: 0px;
     display: none;
   }
+}
+
+.share-facebook {
+  background-color: #3b5998;
+}
+
+.share-twitter {
+  background-color: #1da1f2;
+}
+
+.share-linkedin {
+  background-color: #0077b5;
+}
+
+.share-pinterest {
+  background-color: #bd081c;
+}
+
+.share-reddit {
+  background-color: #ff4500;
+}
+
+.share-telegram {
+  background-color: #0088cc;
+}
+
+.share-gab {
+  background-color: #21cf7a;
+}
+
+.share-gettr {
+  background-color: #FC223B;
+}
+
+.share-truthsocial {
+  background-color: #1f1657;
+}
+
+.share-email {
+  background-color: #888888;
 }
