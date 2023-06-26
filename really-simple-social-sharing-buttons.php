@@ -1,16 +1,15 @@
 <?php
 /**
- * Plugin Name: Really Simple Social Sharing Buttons
- * Description: Inserts share buttons with Font Awesome icons and text for popular social media sites at the top and bottom of the content.
+ * Plugin Name: Social Sharing Buttons
+ * Description: Inserts share buttons with Font Awesome icons and text for selected social media sites at the top and bottom of the content.
  * Version: 2.0
  * Author: RiotRequest
  * License: GPL2
  */
 
-
 // Enqueue Font Awesome stylesheet
 function enqueue_font_awesome() {
-    wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', array(), '4.7.0');
+    wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css', array(), '5.15.4');
 }
 add_action('wp_enqueue_scripts', 'enqueue_font_awesome');
 
@@ -69,39 +68,57 @@ function get_social_sites() {
     $social_sites = array(
         'Facebook' => array(
             'url' => 'https://www.facebook.com/sharer/sharer.php?u=' . urlencode(get_permalink()),
-            'icon' => 'fa fa-facebook',
+            'icon' => 'fa-brands fa-facebook-f',
             'text' => 'Facebook',
             'color' => '#3b5998'
         ),
         'Twitter' => array(
             'url' => 'https://twitter.com/share?url=' . urlencode(get_permalink()) . '&text=' . urlencode(get_the_title()),
-            'icon' => 'fa fa-twitter',
+            'icon' => 'fa-brands fa-twitter',
             'text' => 'Twitter',
             'color' => '#1da1f2'
         ),
         'LinkedIn' => array(
             'url' => 'https://www.linkedin.com/shareArticle?url=' . urlencode(get_permalink()) . '&title=' . urlencode(get_the_title()),
-            'icon' => 'fa fa-linkedin',
+            'icon' => 'fa-brands fa-linkedin',
             'text' => 'LinkedIn',
             'color' => '#0077b5'
         ),
         'Pinterest' => array(
             'url' => 'https://pinterest.com/pin/create/button/?url=' . urlencode(get_permalink()) . '&media=' . wp_get_attachment_url(get_post_thumbnail_id()) . '&description=' . urlencode(get_the_title()),
-            'icon' => 'fa fa-pinterest',
+            'icon' => 'fa-brands fa-pinterest',
             'text' => 'Pinterest',
             'color' => '#bd081c'
         ),
         'Reddit' => array(
             'url' => 'https://www.reddit.com/submit?url=' . urlencode(get_permalink()) . '&title=' . urlencode(get_the_title()),
-            'icon' => 'fa fa-reddit',
+            'icon' => 'fa-brands fa-reddit',
             'text' => 'Reddit',
             'color' => '#ff4500'
         ),
         'Telegram' => array(
             'url' => 'https://telegram.me/share/url?url=' . urlencode(get_permalink()) . '&text=' . urlencode(get_the_title()),
-            'icon' => 'fa fa-telegram',
+            'icon' => 'fa-brands fa-telegram',
             'text' => 'Telegram',
             'color' => '#0088cc'
+        ),
+        'Gab' => array(
+            'url' => 'https://gab.com/compose?url=' . urlencode(get_permalink()),
+            'icon' => 'fa-solid fa-frog',
+            'text' => 'Gab',
+            'color' => '#21cf7a'
+        ),
+        'Gettr' => array(
+            'url' => 'https://gettr.com/share?text=' . urlencode(get_the_title()) . '&url=' . urlencode(get_permalink()),
+            'icon' => 'fa-solid fa-fire-flame-curved',
+            'text' => 'Gettr',
+            'color' => '#FC223B'
+        ),
+        'TruthSocial' => array(
+            'url' => 'https://truthsocial.com/share?url=' . urlencode(get_permalink()),
+            'icon' => 'fa-solid fa-t',
+            'text' => 'Truth Social',
+            'color' => '#1f1657'
         ),
         'Email' => array(
             'url' => 'mailto:?subject=' . urlencode(get_the_title()) . '&body=' . urlencode(get_permalink()),
