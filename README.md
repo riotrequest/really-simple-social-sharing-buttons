@@ -4,3 +4,5 @@ Need some social sharing buttons for your WordPress blog like NOW? Tired of deal
 Install and activate and the plugin will automatically insert social sharing buttons at the top and bottom of your content. For now, it's just Facebook, Twitter, and LinkedIn. I will be adding new ones in the future so be sure to check back from time to time for updates.
 
 ![image](https://github.com/riotrequest/really-simple-social-sharing-buttons/assets/121694664/984aa8ec-0f06-4772-a217-73fd5d904edb)
+
+In the future, I will make variations for both desktop and mobile as well as add more social networking sites.
