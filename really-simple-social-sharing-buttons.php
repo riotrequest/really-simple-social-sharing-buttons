@@ -145,9 +145,10 @@ function add_social_share_buttons($content) {
                 $url = $data['url'];
                 $icon = $data['icon'];
                 $text = $data['text'];
-                $color = $data['color'];
+                // Convert the site name to lowercase, remove spaces and prepend "share-"
+                $class = 'share-' . strtolower(str_replace(' ', '', $site));
                 
-                $buttons .= '<a href="' . $url . '" target="_blank" rel="nofollow noopener" style="background-color:' . $color . '; padding: 8px 12px; color: #fff; text-decoration: none; display: inline-flex; align-items: center; margin-right: 5px; border-radius: 4px;"><i class="' . $icon . '"></i><span class="social-share-text">' . $text . '</span></a>';
+                $buttons .= '<a href="' . $url . '" target="_blank" rel="nofollow noopener" class="social-share-button ' . $class . '"><i class="' . $icon . '"></i><span class="social-share-text">' . $text . '</span></a>';
             }
         }
         
