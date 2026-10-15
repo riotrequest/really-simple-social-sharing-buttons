@@ -2,7 +2,7 @@
 
 ### Good reads travel. Give yours a head start.
 
-A small WordPress plugin for sharing worth clicking. Crisp buttons, modern channels, and a setup screen you can finish before your coffee gets cold.
+Lightweight social sharing buttons for WordPress. Modern networks, clean design, and no tracking scripts.
 
 **Version 3.0.0 · WordPress 6.3+ · PHP 7.4+ · GPL v2**
 
