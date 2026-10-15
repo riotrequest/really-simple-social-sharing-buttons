@@ -1,78 +1,129 @@
-.social-share-buttons {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-bottom: 15px;
+/* Everything is scoped to the plugin, including the WordPress settings screen. */
+.rssb {
+    --rssb-bg: #ffffff;
+    --rssb-ink: #18212f;
+    --rssb-muted: #606b7b;
+    --rssb-line: #e2e7ed;
+    --rssb-surface: #f5f7fa;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-block: 28px;
+    padding: 22px;
+    border: 1px solid var(--rssb-line);
+    border-radius: 20px;
+    background: var(--rssb-bg);
+    color: var(--rssb-ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    text-align: start;
+    isolation: isolate;
 }
-
-.social-share-button {
-  display: flex;
-  align-items: center;
-  margin-right: 5px;
-  border-radius: 4px;
-  padding: 8px 12px;
-  text-decoration: none !important;
-  color: #fff;
-  transition: filter 0.3s ease;
+.rssb[hidden], .rssb [hidden] { display: none !important; }
+.rssb *, .rssb-settings * { box-sizing: border-box; }
+.rssb-heading { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 14px; font-size: 15px; font-weight: 750; line-height: 1.5; }
+.rssb-heading-note { color: var(--rssb-muted); font-size: 12px; font-weight: 450; }
+.rssb-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.rssb .rssb-button {
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    min-width: 44px;
+    min-height: 44px;
+    margin: 0;
+    padding: 10px 15px;
+    border: 1px solid var(--rssb-line);
+    border-radius: 12px;
+    background: var(--rssb-bg);
+    color: var(--rssb-ink);
+    box-shadow: 0 2px 3px rgb(15 23 42 / 3%);
+    font: 600 13px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    letter-spacing: 0;
+    text-decoration: none;
+    text-transform: none;
+    cursor: pointer;
+    transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
 }
-
-.social-share-button:hover {
-  filter: brightness(110%);
+.rssb .rssb-button:hover { transform: translateY(-2px); border-color: var(--rssb-accent); box-shadow: 0 5px 12px rgb(15 23 42 / 9%); }
+.rssb .rssb-button:active { transform: translateY(0); }
+.rssb .rssb-button:focus-visible, .rssb-copy-fallback:focus-visible { outline: 3px solid #2684ff; outline-offset: 3px; }
+.rssb-icon { display: block; flex: 0 0 20px; width: 20px; height: 20px; }
+.rssb--soft .rssb-icon { color: var(--rssb-accent); }
+.rssb--solid .rssb-button { background: var(--rssb-accent); border-color: var(--rssb-accent); color: #fff; }
+.rssb--minimal { padding-inline: 0; border-inline: 0; border-radius: 0; background: transparent; }
+.rssb--minimal .rssb-button { background: transparent; border-color: transparent; box-shadow: none; }
+.rssb--minimal .rssb-button:hover { background: var(--rssb-surface); }
+.rssb-labels--hidden .rssb-label { display: none; }
+.rssb-labels--hidden .rssb-button { padding: 11px; }
+.rssb-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.rssb-status:not(:empty) { position: static; width: auto; height: auto; clip-path: none; white-space: normal; font-size: 12px; color: var(--rssb-muted); }
+.rssb .rssb-button.is-copied { border-color: #168151; }
+.rssb .rssb-copy-fallback { width: 100%; min-height: 44px; padding: 10px; border: 1px solid var(--rssb-line); border-radius: 8px; background: var(--rssb-surface); color: var(--rssb-ink); font: inherit; font-size: 13px; }
+.rssb--dark { --rssb-bg: #131b29; --rssb-ink: #f5f7fc; --rssb-muted: #abb6c7; --rssb-line: #354052; --rssb-surface: #243044; }
+.rssb--dark.rssb--soft .rssb-icon { color: var(--rssb-ink); }
+@media (prefers-color-scheme: dark) {
+    .rssb--auto { --rssb-bg: #131b29; --rssb-ink: #f5f7fc; --rssb-muted: #abb6c7; --rssb-line: #354052; --rssb-surface: #243044; }
+    .rssb--auto.rssb--soft .rssb-icon { color: var(--rssb-ink); }
 }
-
-.social-share-buttons .social-share-text {
-  margin-left: 5px;
-  margin-right: 5px;
+@media (max-width: 575px) {
+    .rssb { padding: 18px; border-radius: 16px; gap: 12px; }
+    .rssb-labels--auto .rssb-label { display: none; }
+    .rssb-labels--auto .rssb-button { padding: 11px; }
+    .rssb--minimal { padding-inline: 0; }
 }
-
-@media screen and (max-width: 576px) {
-  .social-share-button {
-    padding: 8px;
-  }
-
-  .social-share-buttons .social-share-text {
-    margin-right: 0px;
-    margin-left: 0px;
-    display: none;
-  }
+@media (prefers-reduced-motion: reduce) {
+    .rssb .rssb-button { transition: none; }
+    .rssb .rssb-button:hover { transform: none; }
 }
-
-.share-facebook {
-  background-color: #3b5998;
+@media (forced-colors: active) {
+    .rssb .rssb-button { border: 1px solid ButtonText; }
+    .rssb--soft .rssb-icon { color: ButtonText; }
 }
+@media print { .rssb { display: none !important; } }
 
-.share-twitter {
-  background-color: #1da1f2;
-}
-
-.share-linkedin {
-  background-color: #0077b5;
-}
-
-.share-pinterest {
-  background-color: #bd081c;
-}
-
-.share-reddit {
-  background-color: #ff4500;
-}
-
-.share-telegram {
-  background-color: #0088cc;
-}
-
-.share-gab {
-  background-color: #21cf7a;
-}
-
-.share-gettr {
-  background-color: #FC223B;
-}
-
-.share-truthsocial {
-  background-color: #1f1657;
-}
-
-.share-email {
-  background-color: #888888;
+/* Settings: WordPress-native form controls in a compact editorial layout. */
+.rssb-settings { max-width: 1180px; margin: 24px 20px 40px 0; color: #18212f; }
+.rssb-admin-hero { position: relative; padding: 38px 40px; border-radius: 20px; background: radial-gradient(ellipse at 100% 0%, #17634d 0%, transparent 55%), #111c27; color: #fff; }
+.rssb-admin-kicker { font-size: 10px; font-weight: 700; letter-spacing: .16em; color: #9ff2ca; }
+.rssb-admin-kicker span { margin-inline: 8px; opacity: .5; }
+.rssb-admin-hero h1 { max-width: 680px; margin: 18px 0 10px; padding: 0; color: #fff; font-size: clamp(26px, 3vw, 38px); font-weight: 750; line-height: 1.2; letter-spacing: -.035em; }
+.rssb-admin-hero p { margin: 0; color: #c4d4da; font-size: 14px; }
+/* WordPress moves admin notices after the first heading, inside this hero. */
+.rssb-admin-hero .notice { margin: 18px 0; }
+.rssb-admin-hero .notice p { margin: .5em 0; color: #18212f; font-size: 13px; }
+.rssb-version { position: absolute; top: 32px; right: 32px; padding: 5px 10px; border: 1px solid #54826d; border-radius: 30px; color: #c5f7dd; font-size: 11px; }
+.rssb-admin-layout { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(260px, 1fr); align-items: start; gap: 24px; margin-top: 24px; }
+.rssb-admin-card { padding: 28px; border: 1px solid #dfe5ec; border-radius: 18px; background: #fff; }
+.rssb-admin-card fieldset { margin: 0; padding: 0; border: 0; }
+.rssb-admin-card legend { display: flex; align-items: center; gap: 10px; padding: 0; font-size: 18px; font-weight: 700; letter-spacing: -.025em; }
+.rssb-step { display: inline-flex; align-items: center; justify-content: center; width: 27px; height: 27px; border-radius: 8px; background: #e6f6ee; color: #166044; font-size: 11px; letter-spacing: 0; }
+.rssb-settings .description { margin: 12px 0 20px; color: #626d7c; font-size: 12px; }
+.rssb-network-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+.rssb-network-option { display: flex; align-items: center; gap: 10px; min-height: 49px; padding: 12px; border: 1px solid #e0e5ed; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
+.rssb-network-option:has(input:checked) { border-color: #8fbdab; background: #f0faf5; }
+.rssb-network-option input { margin: 0; }
+.rssb-network-option .rssb-icon { width: 17px; height: 17px; flex-basis: 17px; }
+.rssb-admin-card .rssb-appearance { margin-top: 28px; }
+.rssb-field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 16px; margin-top: 20px; }
+.rssb-field-grid label { display: grid; gap: 7px; font-size: 12px; font-weight: 600; }
+.rssb-field-grid select { width: 100%; max-width: none; min-height: 40px; border-color: #c4cdd8; border-radius: 8px; font-size: 12px; }
+.rssb-save-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 28px; padding-top: 24px; border-top: 1px solid #e5e9ef; }
+.rssb-settings .rssb-save { min-height: 42px; padding: 3px 18px; border-color: #166044; border-radius: 9px; background: #166044; font-weight: 600; }
+.rssb-settings .rssb-save:hover, .rssb-settings .rssb-save:focus { background: #104b34; border-color: #104b34; }
+.rssb-save-row span { font-size: 11px; color: #626d7c; }
+.rssb-admin-aside { padding: 8px 0; }
+.rssb-admin-aside h2 { margin: 0 0 8px; font-size: 19px; letter-spacing: -.025em; }
+.rssb-admin-aside > p, .rssb-admin-tip p { color: #626d7c; font-size: 12px; line-height: 1.8; }
+.rssb-admin-aside .rssb { margin-block: 20px; }
+.rssb-admin-tip { padding: 22px; border: 1px dashed #c9d2dc; border-radius: 14px; }
+.rssb-admin-tip h3 { margin-top: 0; font-size: 14px; }
+.rssb-admin-tip code { display: inline-block; padding: 8px 12px; border-radius: 7px; background: #e6ecef; font-size: 12px; }
+@media (max-width: 1000px) { .rssb-admin-layout { grid-template-columns: 1fr; } }
+@media (max-width: 600px) {
+    .rssb-admin-hero, .rssb-admin-card { padding: 24px; }
+    .rssb-admin-kicker { letter-spacing: .08em; }
+    .rssb-version { position: static; display: inline-block; margin-top: 15px; }
+    .rssb-network-grid, .rssb-field-grid { grid-template-columns: 1fr; }
 }
