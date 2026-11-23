@@ -151,6 +151,38 @@ try {
     $rejected = false;
     try { rssb_admin_page(); } catch (RuntimeException $error) { $rejected = true; }
     rssb_test($rejected && array() === get_option('social_sharing_networks'), 'An unauthorized request cannot change settings.');
+
+    $slug = 'really-simple-social-sharing-buttons';
+    $repository = "https://github.com/riotrequest/$slug";
+    $plugin_file = "$slug/$slug.php";
+    $plugin_data = array('UpdateURI' => $repository);
+    $package = "$repository/releases/download/v3.2.1/$slug.zip";
+    $release = array('tag_name' => 'v3.2.1', 'assets' => array(array(
+        'name' => "$slug.zip", 'state' => 'uploaded', 'browser_download_url' => $package,
+    )));
+    $status = 200;
+    $requests = 0;
+    $github_response = function ($pre, $args, $url) use (&$release, &$status, &$requests, $slug) {
+        if ($url !== "https://api.github.com/repos/riotrequest/$slug/releases/latest") {
+            return $pre;
+        }
+        ++$requests;
+        return array('body' => wp_json_encode($release), 'response' => array('code' => $status));
+    };
+    add_filter('pre_http_request', $github_response, 10, 3);
+    try {
+        $hook = 'update_plugins_github.com';
+        rssb_test(false === apply_filters($hook, false, $plugin_data, 'other/other.php') && 0 === $requests, 'Unrelated plugins are ignored.');
+        $offer = apply_filters($hook, false, $plugin_data, $plugin_file);
+        rssb_test('3.2.1' === ($offer['version'] ?? '') && $package === ($offer['package'] ?? ''), 'WordPress receives the version and ZIP URL from the stable release.');
+        $release['assets'][0]['browser_download_url'] = 'https://example.com/other.zip';
+        rssb_test(false === apply_filters($hook, false, $plugin_data, $plugin_file), 'An unexpected or missing ZIP is ignored.');
+        $status = 403;
+        $release['assets'][0]['browser_download_url'] = $package;
+        rssb_test(false === apply_filters($hook, false, $plugin_data, $plugin_file), 'An unavailable GitHub API leaves the update offer empty.');
+    } finally {
+        remove_filter('pre_http_request', $github_response, 10);
+    }
     echo "\n$checks checks passed on WordPress " . get_bloginfo('version') . ".\n";
 } finally {
     foreach ($posts as $id) { wp_delete_post($id, true); }

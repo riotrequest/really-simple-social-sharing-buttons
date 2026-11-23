@@ -2,18 +2,61 @@
 /**
  * Plugin Name: Really Simple Social Sharing Buttons
  * Description: Beautiful, lightweight sharing buttons. Local icons, modern networks, and no tracking scripts.
- * Version: 3.1.1
+ * Version: 3.2.0
  * Requires at least: 6.3
  * Requires PHP: 7.4
  * Author: RiotRequest
  * Plugin URI: https://github.com/riotrequest/really-simple-social-sharing-buttons
+ * Update URI: https://github.com/riotrequest/really-simple-social-sharing-buttons
  * License: GPL v2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: really-simple-social-sharing-buttons
  */
 
 defined('ABSPATH') || exit;
-define('RSSB_VERSION', '3.1.1');
+define('RSSB_VERSION', '3.2.0');
+
+function rssb_release_update($update, $plugin_data, $plugin_file) {
+    $slug = 'really-simple-social-sharing-buttons';
+    $repo = "riotrequest/$slug";
+    $repository = "https://github.com/$repo";
+    // WordPress installs into the directory named in the ZIP.
+    if ($update || $plugin_file !== "$slug/$slug.php" || ($plugin_data['UpdateURI'] ?? '') !== $repository) {
+        return $update;
+    }
+
+    $response = wp_safe_remote_get("https://api.github.com/repos/$repo/releases/latest", array(
+        'timeout'     => 5,
+        'redirection' => 0,
+        'user-agent'  => $slug,
+        'headers'     => array('Accept' => 'application/vnd.github+json'),
+    ));
+    if (200 !== (int) wp_remote_retrieve_response_code($response)) {
+        return $update;
+    }
+
+    $release = json_decode(wp_remote_retrieve_body($response), true);
+    $tag = $release['tag_name'] ?? '';
+    if (!is_string($tag) || !preg_match('/^v([0-9]+\.[0-9]+\.[0-9]+)$/D', $tag, $version)) {
+        return $update;
+    }
+
+    $filename = "$slug.zip";
+    $package = "$repository/releases/download/$tag/$filename";
+    foreach ((array) ($release['assets'] ?? array()) as $asset) {
+        if (($asset['name'] ?? '') === $filename && ($asset['state'] ?? '') === 'uploaded'
+            && ($asset['browser_download_url'] ?? '') === $package) {
+            return array(
+                'slug'    => $slug,
+                'version' => $version[1],
+                'url'     => "$repository/releases/tag/$tag",
+                'package' => $package,
+            );
+        }
+    }
+    return $update;
+}
+add_filter('update_plugins_github.com', 'rssb_release_update', 10, 3);
 
 /** Keep legacy option keys so upgrading never silently changes selected networks. */
 function rssb_networks() {

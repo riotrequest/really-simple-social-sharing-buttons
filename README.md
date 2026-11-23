@@ -4,7 +4,7 @@
 
 Lightweight social sharing buttons for WordPress. Modern networks, clean design, and no tracking scripts.
 
-**Version 3.1.1 · WordPress 6.3+ · PHP 7.4+ · GPL v2**
+**Version 3.2.0 · WordPress 6.3+ · PHP 7.4+ · GPL v2**
 
 ![Light and dark sharing buttons in version 3](screenshot.jpg)
 
@@ -22,14 +22,18 @@ Normal sharing links work without JavaScript. A small dependency-free script add
 
 ## Up and running
 
-1. Download the repository using **Code → Download ZIP**, then extract it.
-2. Rename the extracted folder to `really-simple-social-sharing-buttons` and put it in `wp-content/plugins/`. You can also ZIP that renamed folder and upload it through **Plugins → Add New Plugin → Upload Plugin**.
+1. Download `really-simple-social-sharing-buttons.zip` from the [latest release](https://github.com/riotrequest/really-simple-social-sharing-buttons/releases/latest).
+2. Upload the ZIP through **Plugins → Add New Plugin → Upload Plugin**.
 3. Activate **Really Simple Social Sharing Buttons**.
 4. Open **Social Sharing** in your WordPress dashboard. Choose your channels, placement, button style, theme, and labels, then select **Save your setup**.
 
 Drag channels by their handles or use the up and down arrows to order them. After saving, checked channels appear in that order in the preview and on your site.
 
 Fresh installs start with Facebook, X, Bluesky, WhatsApp, LinkedIn, email, and copy link, above and below single blog posts. Uncheck every channel to turn the buttons off.
+
+## Updates
+
+Starting with 3.2.0, WordPress offers new stable GitHub releases on **Plugins** and **Dashboard → Updates** while the plugin is active in `wp-content/plugins/really-simple-social-sharing-buttons/`. Install 3.2.0 or later once to enable update checks on older installs. Use **Enable auto-updates** on the Plugins screen if you want WordPress to install future versions automatically.
 
 ## Put sharing where it belongs
 
@@ -82,6 +86,7 @@ The plugin stores selected network names and display preferences in two WordPres
 
 - It doesn’t collect passwords, store social access tokens, create visitor cookies, count clicks, or send analytics.
 - It makes no server-side social API requests and loads no third-party scripts, fonts, or styles. Icons and assets are served by your site.
+- WordPress update checks use the public GitHub Releases API. WordPress downloads the release ZIP from GitHub when installing an update.
 - Sharing links contain the public post URL, plus its title and featured image URL where needed. Clicking a link takes the reader to that service, whose privacy policy and session cookies then apply.
 - WordPress handles administrator login and sessions. Viewing or saving plugin settings requires the `manage_options` capability. Saves also verify a WordPress nonce to protect against cross-site request forgery, allowlist input, and escape output.
 - Private, draft, and currently password-protected posts don’t render sharing buttons. A WordPress nonce is a form-protection token, not a social credential or a substitute for permission checks.
@@ -119,7 +124,20 @@ Version 3 was checked on WordPress 6.3 and 7.1.3 with PHP 8.2, plus desktop and 
 
 Found a bug? [Open an issue](https://github.com/riotrequest/really-simple-social-sharing-buttons/issues) with the WordPress/PHP versions, theme, browser, and steps to reproduce it.
 
+### Publishing an update
+
+Bump the plugin version and tag that commit with the same version prefixed by `v`. Build the installable asset from the tag, then attach it to a stable GitHub Release for that tag. The updater looks for this exact filename and ZIP layout.
+
+```sh
+git archive --format=zip --prefix=really-simple-social-sharing-buttons/ \
+  --output=really-simple-social-sharing-buttons.zip v3.2.0
+```
+
 ## Changelog
+
+### 3.2.0
+
+- Added GitHub release updates through the WordPress dashboard.
 
 ### 3.1.1
 
