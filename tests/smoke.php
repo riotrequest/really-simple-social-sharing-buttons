@@ -104,12 +104,33 @@ try {
     $posts[] = $page;
     rssb_test(1 === substr_count(rssb_test_content($page), 'data-rssb data-url'), 'Shortcodes work on public pages.');
 
-    $_POST = array('rssb_save' => '1', 'networks' => array('Twitter', 'fake'), 'settings' => array('theme' => 'dark'));
+    update_option('social_sharing_networks', array('Copy', 'Twitter'));
+    $_POST = array();
+    ob_start();
+    rssb_admin_page();
+    @$dom->loadHTML('<?xml encoding="UTF-8">' . ob_get_clean());
+    $xpath = new DOMXPath($dom);
+    $choices = $xpath->query('//input[@name="networks[]"]');
+    rssb_test('Copy' === $choices->item(0)->getAttribute('value') && 'Twitter' === $choices->item(1)->getAttribute('value'), 'The settings list starts with the previously saved channels in order.');
+
+    $_POST = array('rssb_save' => '1', 'networks' => array('Twitter', 'fake', 'Facebook', 'Twitter'), 'settings' => array('theme' => 'dark'));
     $_REQUEST['rssb_nonce'] = wp_create_nonce('rssb_save_settings');
+    $purged_types = array();
+    $record_purge = function ($post_type) use (&$purged_types) { $purged_types[] = $post_type; };
+    add_action('litespeed_purge_posttype', $record_purge);
     ob_start();
     rssb_admin_page();
     $admin_html = ob_get_clean();
-    rssb_test(array('Twitter') === get_option('social_sharing_networks') && 'dark' === rssb_settings()['theme'], 'Authorized, nonce-verified saves sanitize and persist preferences.');
+    rssb_test(in_array('post', $purged_types, true) && in_array('page', $purged_types, true), 'Changed settings refresh affected LiteSpeed pages.');
+    $purged_types = array();
+    ob_start();
+    rssb_admin_page();
+    ob_end_clean();
+    remove_action('litespeed_purge_posttype', $record_purge);
+    rssb_test(array() === $purged_types, 'Saving the same settings leaves the page cache alone.');
+    rssb_test(array('Twitter', 'Facebook') === get_option('social_sharing_networks') && 'dark' === rssb_settings()['theme'], 'Authorized, nonce-verified saves sanitize and persist channel order and preferences.');
+    preg_match_all('/\bshare-(twitter|facebook)\b/', rssb_render_buttons($public), $button_order);
+    rssb_test(array('twitter', 'facebook') === $button_order[1], 'Public buttons follow the saved channel order.');
     @$dom->loadHTML('<?xml encoding="UTF-8">' . $admin_html);
     $xpath = new DOMXPath($dom);
     rssb_test(1 === $xpath->query('//input[@value="Twitter"][@checked]')->length && 0 === $xpath->query('//input[@value="Copy"][@checked]')->length, 'Saved selections appear immediately after submitting.');

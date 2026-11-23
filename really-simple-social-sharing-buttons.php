@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Really Simple Social Sharing Buttons
  * Description: Beautiful, lightweight sharing buttons. Local icons, modern networks, and no tracking scripts.
- * Version: 3.0.0
+ * Version: 3.1.0
  * Requires at least: 6.3
  * Requires PHP: 7.4
  * Author: RiotRequest
@@ -13,7 +13,7 @@
  */
 
 defined('ABSPATH') || exit;
-define('RSSB_VERSION', '3.0.0');
+define('RSSB_VERSION', '3.1.0');
 
 /** Keep legacy option keys so upgrading never silently changes selected networks. */
 function rssb_networks() {
@@ -193,6 +193,7 @@ add_action('admin_menu', 'rssb_admin_menu');
 function rssb_admin_assets($hook) {
     if ('toplevel_page_social_sharing' === $hook) {
         rssb_enqueue_assets();
+        wp_enqueue_script('rssb-admin', plugins_url('social-sharing-admin.js', __FILE__), array('jquery-ui-sortable', 'jquery-touch-punch', 'wp-a11y', 'wp-i18n'), RSSB_VERSION, true);
     }
 }
 add_action('admin_enqueue_scripts', 'rssb_admin_assets');
@@ -206,11 +207,18 @@ function rssb_admin_page() {
         check_admin_referer('rssb_save_settings', 'rssb_nonce');
         $networks = isset($_POST['networks']) ? wp_unslash($_POST['networks']) : array();
         $settings = isset($_POST['settings']) ? wp_unslash($_POST['settings']) : array();
-        update_option('social_sharing_networks', rssb_sanitize_networks($networks));
-        update_option('social_sharing_settings', rssb_sanitize_settings($settings));
+        $networks_changed = update_option('social_sharing_networks', rssb_sanitize_networks($networks));
+        $settings_changed = update_option('social_sharing_settings', rssb_sanitize_settings($settings));
+        if (($networks_changed || $settings_changed) && has_action('litespeed_purge_posttype')) {
+            foreach (get_post_types(array('public' => true)) as $post_type) {
+                do_action('litespeed_purge_posttype', $post_type);
+            }
+        }
         $saved = true;
     }
     $networks = rssb_sanitize_networks(get_option('social_sharing_networks', rssb_default_networks()));
+    $catalog = rssb_networks();
+    $network_order = array_unique(array_merge($networks, array_keys($catalog)));
     $settings = rssb_settings();
     $fields = array(
         'position' => array(__('Placement', 'really-simple-social-sharing-buttons'), array('both' => __('Above & below posts', 'really-simple-social-sharing-buttons'), 'above' => __('Above posts', 'really-simple-social-sharing-buttons'), 'below' => __('Below posts', 'really-simple-social-sharing-buttons'), 'manual' => __('Manual / shortcode only', 'really-simple-social-sharing-buttons'))),
@@ -234,16 +242,35 @@ function rssb_admin_page() {
             <div class="rssb-admin-card">
                 <fieldset>
                     <legend><span class="rssb-step">01</span> <?php esc_html_e('Pick your channels', 'really-simple-social-sharing-buttons'); ?></legend>
-                    <p class="description"><?php esc_html_e('Choose where readers can share. Leave everything unchecked to switch the buttons off.', 'really-simple-social-sharing-buttons'); ?></p>
-                    <div class="rssb-network-grid">
-                        <?php foreach (rssb_networks() as $key => $data) : ?>
-                            <label class="rssb-network-option">
-                                <input type="checkbox" name="networks[]" value="<?php echo esc_attr($key); ?>" <?php checked(in_array($key, $networks, true)); ?>>
-                                <?php echo rssb_icon($data[2]); // Fixed, local SVG markup. ?>
-                                <span><?php echo esc_html($data[0]); ?></span>
-                            </label>
+                    <p class="description"><?php esc_html_e('Choose where readers can share. Leave everything unchecked to switch the buttons off.', 'really-simple-social-sharing-buttons'); ?>
+                        <span data-rssb-order-help hidden><?php esc_html_e('Drag rows or use the arrows to set the order of the checked channels.', 'really-simple-social-sharing-buttons'); ?></span>
+                    </p>
+                    <ol class="rssb-network-list" role="list" data-position-message="<?php
+                        /* translators: 1: channel name, 2: new position, 3: number of channels. */
+                        echo esc_attr__('%1$s moved to position %2$d of %3$d.', 'really-simple-social-sharing-buttons');
+                    ?>">
+                        <?php foreach ($network_order as $key) : ?>
+                            <?php $data = $catalog[$key]; ?>
+                            <li class="rssb-network-option" data-channel-name="<?php echo esc_attr($data[0]); ?>">
+                                <span class="dashicons dashicons-menu rssb-network-handle" aria-hidden="true" hidden></span>
+                                <label>
+                                    <input type="checkbox" name="networks[]" value="<?php echo esc_attr($key); ?>" <?php checked(in_array($key, $networks, true)); ?>>
+                                    <?php echo rssb_icon($data[2]); // Fixed, local SVG markup. ?>
+                                    <span><?php echo esc_html($data[0]); ?></span>
+                                </label>
+                                <div class="rssb-order-controls" hidden>
+                                    <button type="button" class="button" data-rssb-move="up" aria-label="<?php
+                                        /* translators: %s: channel name. */
+                                        echo esc_attr(sprintf(__('Move %s up', 'really-simple-social-sharing-buttons'), $data[0]));
+                                    ?>"><span class="dashicons dashicons-arrow-up-alt2" aria-hidden="true"></span></button>
+                                    <button type="button" class="button" data-rssb-move="down" aria-label="<?php
+                                        /* translators: %s: channel name. */
+                                        echo esc_attr(sprintf(__('Move %s down', 'really-simple-social-sharing-buttons'), $data[0]));
+                                    ?>"><span class="dashicons dashicons-arrow-down-alt2" aria-hidden="true"></span></button>
+                                </div>
+                            </li>
                         <?php endforeach; ?>
-                    </div>
+                    </ol>
                 </fieldset>
                 <fieldset class="rssb-appearance">
                     <legend><span class="rssb-step">02</span> <?php esc_html_e('Make it yours', 'really-simple-social-sharing-buttons'); ?></legend>

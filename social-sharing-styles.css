@@ -100,11 +100,19 @@
 .rssb-admin-card legend { display: flex; align-items: center; gap: 10px; padding: 0; font-size: 18px; font-weight: 700; letter-spacing: -.025em; }
 .rssb-step { display: inline-flex; align-items: center; justify-content: center; width: 27px; height: 27px; border-radius: 8px; background: #e6f6ee; color: #166044; font-size: 11px; letter-spacing: 0; }
 .rssb-settings .description { margin: 12px 0 20px; color: #626d7c; font-size: 12px; }
-.rssb-network-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
-.rssb-network-option { display: flex; align-items: center; gap: 10px; min-height: 49px; padding: 12px; border: 1px solid #e0e5ed; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
+.rssb-network-list { margin: 0; list-style: none; }
+.rssb-network-option, .rssb-network-placeholder { margin: 0 0 6px; border: 1px solid #e0e5ed; border-radius: 10px; }
+.rssb-network-option { display: flex; align-items: center; gap: 8px; min-height: 48px; padding: 4px 8px; background: #fff; font-size: 12px; font-weight: 600; }
 .rssb-network-option:has(input:checked) { border-color: #8fbdab; background: #f0faf5; }
+.rssb-network-option label { display: flex; flex: 1; align-items: center; gap: 8px; min-height: 38px; }
 .rssb-network-option input { margin: 0; }
 .rssb-network-option .rssb-icon { width: 17px; height: 17px; flex-basis: 17px; }
+.rssb-network-placeholder { border: 1px dashed #8fbdab; background: #f0faf5; }
+.rssb-network-handle:not([hidden]) { display: grid; place-items: center; width: 26px; height: 36px; cursor: grab; touch-action: none; user-select: none; }
+.rssb-network-handle[hidden] { display: none; }
+.rssb-order-controls:not([hidden]) { display: flex; gap: 4px; }
+.rssb-order-controls .button { display: grid; place-items: center; width: 34px; min-height: 34px; padding: 0; }
+.rssb-order-controls .button[aria-disabled="true"] { opacity: .5; cursor: default; }
 .rssb-admin-card .rssb-appearance { margin-top: 28px; }
 .rssb-field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 16px; margin-top: 20px; }
 .rssb-field-grid label { display: grid; gap: 7px; font-size: 12px; font-weight: 600; }
@@ -125,5 +133,5 @@
     .rssb-admin-hero, .rssb-admin-card { padding: 24px; }
     .rssb-admin-kicker { letter-spacing: .08em; }
     .rssb-version { position: static; display: inline-block; margin-top: 15px; }
-    .rssb-network-grid, .rssb-field-grid { grid-template-columns: 1fr; }
+    .rssb-field-grid { grid-template-columns: 1fr; }
 }

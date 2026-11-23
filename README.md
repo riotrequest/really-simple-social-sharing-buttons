@@ -4,7 +4,7 @@
 
 Lightweight social sharing buttons for WordPress. Modern networks, clean design, and no tracking scripts.
 
-**Version 3.0.0 · WordPress 6.3+ · PHP 7.4+ · GPL v2**
+**Version 3.1.0 · WordPress 6.3+ · PHP 7.4+ · GPL v2**
 
 ![Light and dark sharing buttons in version 3](screenshot.jpg)
 
@@ -26,6 +26,8 @@ Normal sharing links work without JavaScript. A small dependency-free script add
 2. Rename the extracted folder to `really-simple-social-sharing-buttons` and put it in `wp-content/plugins/`. You can also ZIP that renamed folder and upload it through **Plugins → Add New Plugin → Upload Plugin**.
 3. Activate **Really Simple Social Sharing Buttons**.
 4. Open **Social Sharing** in your WordPress dashboard. Choose your channels, placement, button style, theme, and labels, then select **Save your setup**.
+
+Drag channels by their handles or use the up and down arrows to order them. After saving, checked channels appear in that order in the preview and on your site.
 
 Fresh installs start with Facebook, X, Bluesky, WhatsApp, LinkedIn, email, and copy link, above and below single blog posts. Uncheck every channel to turn the buttons off.
 
@@ -102,7 +104,7 @@ The plugin uses system fonts and inherits page direction. The toolbar is hidden 
 
 ## Development
 
-No package install or build step. The runtime is one PHP file, one stylesheet, and one JavaScript file.
+No package install or build step. The dashboard uses WordPress’s bundled sortable controls. The public sharing buttons have no JavaScript dependencies.
 
 ```sh
 php -l really-simple-social-sharing-buttons.php
@@ -118,6 +120,11 @@ Version 3 was checked on WordPress 6.3 and 7.1.3 with PHP 8.2, plus desktop and 
 Found a bug? [Open an issue](https://github.com/riotrequest/really-simple-social-sharing-buttons/issues) with the WordPress/PHP versions, theme, browser, and steps to reproduce it.
 
 ## Changelog
+
+### 3.1.0
+
+- Added drag-and-drop and keyboard-accessible arrows to set the display order of sharing buttons. Existing selections and order carry over on upgrade.
+- Refresh cached posts and pages on settings changes when LiteSpeed Cache is active.
 
 ### 3.0.0
 
