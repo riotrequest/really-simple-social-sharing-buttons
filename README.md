@@ -4,7 +4,7 @@
 
 Lightweight social sharing buttons for WordPress. Modern networks, clean design, and no tracking scripts.
 
-**Version 3.1.0 · WordPress 6.3+ · PHP 7.4+ · GPL v2**
+**Version 3.1.1 · WordPress 6.3+ · PHP 7.4+ · GPL v2**
 
 ![Light and dark sharing buttons in version 3](screenshot.jpg)
 
@@ -120,6 +120,10 @@ Version 3 was checked on WordPress 6.3 and 7.1.3 with PHP 8.2, plus desktop and 
 Found a bug? [Open an issue](https://github.com/riotrequest/really-simple-social-sharing-buttons/issues) with the WordPress/PHP versions, theme, browser, and steps to reproduce it.
 
 ## Changelog
+
+### 3.1.1
+
+- Corrected the Truth Social button to use its official logomark.
 
 ### 3.1.0
 

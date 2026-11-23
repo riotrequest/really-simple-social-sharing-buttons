@@ -60,6 +60,8 @@ try {
     update_option('social_sharing_networks', array('Twitter', 'Gab', 'TruthSocial'));
     $legacy = rssb_render_buttons($public);
     rssb_test(strpos($legacy, '>X</span>') !== false && strpos($legacy, 'share-gab') !== false && strpos($legacy, 'share-bluesky') === false, 'Legacy selections survive and Twitter displays as X.');
+    $truth_social = rssb_markup(get_permalink($public), 'Story', '', array('TruthSocial'), rssb_settings());
+    rssb_test(false !== strpos($truth_social, rssb_icon('truthsocial')) && rssb_icon('truthsocial') !== rssb_icon('share'), 'Truth Social renders its dedicated logomark.');
     update_option('social_sharing_networks', array());
     rssb_test('' === rssb_render_buttons($public), 'An intentionally empty selection stays empty.');
     rssb_test(array('Twitter') === rssb_sanitize_networks(array('Twitter', 'Twitter', '<script>', array('bad'), 4)), 'Network input rejects unknown, duplicate, and non-string values.');

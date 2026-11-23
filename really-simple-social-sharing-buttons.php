@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Really Simple Social Sharing Buttons
  * Description: Beautiful, lightweight sharing buttons. Local icons, modern networks, and no tracking scripts.
- * Version: 3.1.0
+ * Version: 3.1.1
  * Requires at least: 6.3
  * Requires PHP: 7.4
  * Author: RiotRequest
@@ -13,7 +13,7 @@
  */
 
 defined('ABSPATH') || exit;
-define('RSSB_VERSION', '3.1.0');
+define('RSSB_VERSION', '3.1.1');
 
 /** Keep legacy option keys so upgrading never silently changes selected networks. */
 function rssb_networks() {
@@ -31,7 +31,7 @@ function rssb_networks() {
         'Native'      => array(__('More options', 'really-simple-social-sharing-buttons'), '#475569', 'share'),
         'Gab'         => array('Gab', '#217b16', 'chat'),
         'Gettr'       => array('Gettr', '#c72031', 'bolt'),
-        'TruthSocial' => array('Truth Social', '#5442b5', 'chat'),
+        'TruthSocial' => array('Truth Social', '#5448ee', 'truthsocial'),
     );
 }
 
@@ -82,6 +82,8 @@ function rssb_icon($name) {
         'link'      => '<path d="m10 13 4-4m-6 6-2 2a4 4 0 0 0 6 6l3-3a4 4 0 0 0 0-6M16 9l2-2a4 4 0 0 0-6-6L9 4a4 4 0 0 0 0 6" transform="scale(.9) translate(1 1)"/>',
         'share'     => '<path d="M12 15V3m-4 4 4-4 4 4M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/>',
         'bolt'      => '<path d="m13 2-9 12h7l-1 8 10-12h-7l1-8Z"/>',
+        // White logomark from https://help.truthsocial.com/branding/, scaled to fit.
+        'truthsocial' => '<path fill="currentColor" stroke="none" transform="translate(3 3) scale(.125)" d="M140.401 45V13.5H53.1006V129.9H90.6006V45H140.401ZM3 13.5H39V45H3V13.5ZM104.399 98.3994H140.399V129.899H104.399V98.3994Z"/>',
     );
     $path = isset($paths[$name]) ? $paths[$name] : $paths['share'];
     return '<svg class="rssb-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' . $path . '</svg>';
